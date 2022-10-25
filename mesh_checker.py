@@ -64,17 +64,15 @@ class Mesh_checker():
         print("get_tris")
         layer = self.bm.faces.layers.int.get("AutocompleteSelect")
         tris = self.bm.calc_loop_triangles()
-        tris_coords = np.zeros((len(tris)*3, 3))
+        tris_coords = []
 
-        counter = 0
         for triangle in tris:
             if triangle[0].face[layer] == 1:
-                tris_coords[counter] = triangle[0].vert.co
-                tris_coords[counter+1] = triangle[1].vert.co
-                tris_coords[counter+2] = triangle[2].vert.co
-                counter += 3
+                tris_coords.append(triangle[0].vert.co)
+                tris_coords.append(triangle[1].vert.co)
+                tris_coords.append(triangle[2].vert.co)
+
         
-        tris_coords = tris_coords[:counter]
         print(tris_coords)
 
         return tris_coords

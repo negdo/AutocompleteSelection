@@ -7,6 +7,7 @@ import gpu
 from gpu_extras.batch import batch_for_shader
 from struct import pack
 from .mesh_checker import Mesh_checker
+from mathutils import Vector
 
 class OverlayAutocomplete():
     def __init__(self, bm, layer, context):
@@ -35,6 +36,8 @@ class OverlayAutocomplete():
         if self.mesh_checker.check_for_changes():
             self.mesh_checker.update_mesh_data()
             self.faces_to_draw = self.mesh_checker.get_tris()
+
+        temp_faces = [Vector((1.0, 0.0, -1.0)), Vector((1.0, 0.0, 0.0)), Vector((1.0, -1.0, 0.0)), Vector((1.0, 0.0, -1.0)), Vector((1.0, -1.0, 0.0)), Vector((1.0, -1.0, -1.0)), Vector((1.0, 1.0, -1.0)), Vector((1.0, 1.0, 0.0)), Vector((1.0, 0.0, 0.0)), Vector((1.0, 1.0, -1.0)), Vector((1.0, 0.0, 0.0)), Vector((1.0, 0.0, -1.0)), Vector((1.0, 1.0, 0.0)), Vector((1.0, 1.0, 1.0)), Vector((1.0, 0.0, 1.0)), Vector((1.0, 1.0, 0.0)), Vector((1.0, 0.0, 1.0)), Vector((1.0, 0.0, 0.0))]
 
         batch = batch_for_shader(self.shader, 'TRIS', {"pos": self.faces_to_draw})
         self.shader.bind()
