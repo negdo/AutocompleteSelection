@@ -1,13 +1,6 @@
 import numpy as np
 
-def check_for_changes(bm, last_selection):
-    # checks if bmesh has changed
-    # comparing vertex coordiantes and selection to last_selection
-    new = str([(v.co, v.select) for v in bm.verts])
-    if new != last_selection:
-        last_selection = new
-        return True
-    return False
+
 
 
 def get_autocomplete_face_coords(bm):
@@ -42,7 +35,7 @@ def compare_parameters(face, avg_parameters, diff_parameters):
 
     differences = np.zeros(2)
     
-    differences[0] = vectorLength(face.normal - avg_parameters[0])
+    differences[0] = vectorLength(np.array(face.normal) - avg_parameters[0])
     differences[1] = abs(face.calc_area() - avg_parameters[1])
 
     differences -= diff_parameters
@@ -59,21 +52,28 @@ def avg_parameters(parameters_faces, factor, delta):
     # factor: np array
     # delta: np array
 
-    avg = np.zeros(2)
+    avg = [0, 0]
     diff = np.zeros(2)
 
     # average all parameters
-    avg[0] = np.average(parameters_faces["normal"])
+    avg[0] = np.average(parameters_faces["normal"], axis=0)
+    print("avg", avg[0])
     avg[1] = np.average(parameters_faces["area"])
 
     # converting normal to length for easier comparison
-    vecLenVectorized = np.vectorize(vectorLength)
     np.subtract(parameters_faces["normal"], avg[0])
-    vecLenVectorized(parameters_faces["normal"])
+    #vecLenVectorized = np.vectorize(vectorLength)
+    #vecLenVectorized(parameters_faces["normal"])
+
+    normals = np.zeros(len(parameters_faces["normal"]))
+    for i in range(len(parameters_faces["normal"])):
+        normals[i] = vectorLength(parameters_faces["normal"][i])
+    
+
 
     # highest difference between average and parameter
-    max1 = vectorLength(avg[0] - np.amax(parameters_faces["normal"]))
-    max2 = vectorLength(avg[0] - np.amin(parameters_faces["normal"]))
+    max1 = abs(np.amax(normals))
+    max2 = abs(np.amin(normals))
     diff[0] = max(max1, max2)*factor[0] + delta[0]
     max1 = abs(avg[1] - np.amax(parameters_faces["area"]))
     max2 = abs(avg[1] - np.amin(parameters_faces["area"]))
