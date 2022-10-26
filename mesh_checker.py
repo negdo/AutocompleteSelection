@@ -50,15 +50,21 @@ class Mesh_checker():
         # calculate average of parameters
         avg, diff = avg_parameters(parameters_faces, np.ones(2), np.zeros(2))
 
+        edges = []
         # compare average parameters with all faces and set layer
         for face in self.bm.faces:
             if not face.select and compare_parameters(face, avg, diff):
                 face[layer] = 1
+                # get edges of face for drawing
+                for edge in face.edges:
+                    edges.append(edge.verts[0].co)
+                    edges.append(edge.verts[1].co)
+                
             else:
                 face[layer] = 0
 
         self.bm.faces.ensure_lookup_table()
-        return
+        return edges
 
     def get_tris(self):
         # get triangles from bmesh

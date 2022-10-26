@@ -16,6 +16,7 @@ class OverlayAutocomplete():
         self.layer = layer
         self.handler = None
         self.faces_to_draw = []
+        self.edges_to_draw = []
         self.context = context
         self.mesh_checker = Mesh_checker(context)
 
@@ -43,12 +44,20 @@ class OverlayAutocomplete():
             return
 
         if change:
-            self.mesh_checker.update_mesh_data()
+            self.edges_to_draw = self.mesh_checker.update_mesh_data()
             self.faces_to_draw = self.mesh_checker.get_tris()
 
         bgl.glEnable(bgl.GL_DEPTH_TEST)
         batch = batch_for_shader(self.shader, 'TRIS', {"pos": self.faces_to_draw})
+        
         self.shader.bind()
         color = self.shader.uniform_from_name("color")
-        self.shader.uniform_vector_float(color, pack("4f", 0.6, 0.6, 0.1, 1.0), 4)
+        self.shader.uniform_vector_float(color, pack("4f", 0.7, 0.6, 0.4, 1.0), 4)
+        batch.draw(self.shader)
+
+
+        batch = batch_for_shader(self.shader, 'LINES', {"pos": self.edges_to_draw})
+        self.shader.bind()
+        color = self.shader.uniform_from_name("color")
+        self.shader.uniform_vector_float(color, pack("4f", 0.0, 0.0, 0.0, 1.0), 4)
         batch.draw(self.shader)
