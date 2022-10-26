@@ -40,7 +40,7 @@ def compare_parameters(face, avg_parameters, diff_parameters):
 
     differences -= diff_parameters
 
-    if differences.size == (differences >= 0).sum():
+    if differences.size == (differences <= 0.001).sum():
         return True
     else:
         return False
@@ -57,24 +57,19 @@ def avg_parameters(parameters_faces, factor, delta):
 
     # average all parameters
     avg[0] = np.average(parameters_faces["normal"], axis=0)
-    print("avg", avg[0])
     avg[1] = np.average(parameters_faces["area"])
 
     # converting normal to length for easier comparison
-    np.subtract(parameters_faces["normal"], avg[0])
-    #vecLenVectorized = np.vectorize(vectorLength)
-    #vecLenVectorized(parameters_faces["normal"])
+    parameters_faces["normal"] = np.subtract(parameters_faces["normal"], avg[0])
 
     normals = np.zeros(len(parameters_faces["normal"]))
     for i in range(len(parameters_faces["normal"])):
         normals[i] = vectorLength(parameters_faces["normal"][i])
-    
 
 
     # highest difference between average and parameter
-    max1 = abs(np.amax(normals))
-    max2 = abs(np.amin(normals))
-    diff[0] = max(max1, max2)*factor[0] + delta[0]
+
+    diff[0] = np.amax(normals)*factor[0] + delta[0]
     max1 = abs(avg[1] - np.amax(parameters_faces["area"]))
     max2 = abs(avg[1] - np.amin(parameters_faces["area"]))
     diff[1] = max(max1, max2)*factor[1] + delta[0]

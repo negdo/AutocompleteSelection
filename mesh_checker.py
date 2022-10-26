@@ -23,6 +23,7 @@ class Mesh_checker():
 
     def update_mesh_data(self):
         # update mesh data in layer
+        print("update_mesh_data")
         
         self.bm.faces.ensure_lookup_table()
         self.bm.verts.ensure_lookup_table()
@@ -61,7 +62,6 @@ class Mesh_checker():
 
     def get_tris(self):
         # get triangles from bmesh
-        print("get_tris")
         layer = self.bm.faces.layers.int.get("AutocompleteSelect")
         tris = self.bm.calc_loop_triangles()
         tris_coords = []
@@ -71,8 +71,5 @@ class Mesh_checker():
                 tris_coords.append(triangle[0].vert.co)
                 tris_coords.append(triangle[1].vert.co)
                 tris_coords.append(triangle[2].vert.co)
-
-        
-        print(tris_coords)
 
         return tris_coords
