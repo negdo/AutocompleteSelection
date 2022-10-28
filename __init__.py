@@ -33,6 +33,10 @@ bl_info = {
 import bpy
 from .autocomplete import Autocomplete
 
+
+
+
+
 addon_keymaps = []
 def register():
     bpy.utils.register_class(Autocomplete)
@@ -43,5 +47,7 @@ def register():
         km = wm.keyconfigs.addon.keymaps.new(name='3D View', space_type='VIEW_3D')
         kmi = km.keymap_items.new(Autocomplete.bl_idname, type='SPACE', value='PRESS', alt=True)
         addon_keymaps.append((km, kmi))
+
+
 def unregister():
     bpy.utils.unregister_class(Autocomplete)
