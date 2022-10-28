@@ -88,5 +88,41 @@ def vectorLength(vector):
     return (vector[0]**2 + vector[1]**2 + vector[2]**2)**0.5
 
 
+def get_bounding_box(bm):
+    # returns rotated bounding box of selected faces
+
+
+    # get selected faces
+    bm.faces.ensure_lookup_table()
+    faces = []
+    for face in bm.faces:
+        if face.select:
+            faces.append(face.verts[0].co)
+
+    faces = np.array(faces)
+
+    
+    # get average coordinates of selected faces
+    avg = np.average(faces, axis=0)
+
+    # find a point that is furthest away from average
+    # this point will be the center of the bounding box
+
+    from_center = np.subtract(faces, avg)
+
+    distances = np.zeros(len(from_center))
+    for i in range(len(from_center)):
+        distances[i] = vectorLength(from_center[i])
+    
+    # get index of point that is furthest away from average
+
+    vector1 = from_center[np.argmax(distances)]
+
+    # get a point that is furthest away from vector1
+
+    distances = np.zeros(len(from_center))
+
+
+
 
 
