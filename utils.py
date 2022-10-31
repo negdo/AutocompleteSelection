@@ -1,5 +1,7 @@
 import numpy as np
-
+from pathlib import Path
+from bpy.utils import resource_path
+import bpy
 
 
 
@@ -123,6 +125,20 @@ def get_bounding_box(bm):
     distances = np.zeros(len(from_center))
 
 
+def append_geo_nodes():
+    # append geometry nodes group AutocompleteUtils
+    print("Appending Autocomplete Utils")
+    USER = Path(resource_path('USER'))
+    src = USER / "scripts/addons/AutocompleteSelection"
 
+    file_path = src / "AutocompleteUtils.blend"
+    inner_path = "NodeTree"
+    object_name = "Autocomplete Utils"
+
+    bpy.ops.wm.append(
+        filepath=str(file_path / inner_path / object_name),
+        directory=str(file_path / inner_path),
+        filename=object_name
+    )
 
 

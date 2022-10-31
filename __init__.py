@@ -35,10 +35,10 @@ from .autocomplete import Autocomplete
 
 
 
-
-
 addon_keymaps = []
 def register():
+    
+
     bpy.utils.register_class(Autocomplete)
 
     # Add the hotkey

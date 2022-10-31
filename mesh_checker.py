@@ -12,11 +12,8 @@ class Mesh_checker():
         self.context = context
         self.bm = bmesh.from_edit_mesh(context.active_object.data)
         self.mat = context.active_object.matrix_world
-        try:
-            self.geonodes_group = bpy.data.node_groups['Autocomplete Utils']
-        except:
-            self.append_geo_nodes()
-            self.geonodes_group = bpy.data.node_groups['Autocomplete Utils']
+        
+        self.geonodes_group = bpy.data.node_groups['Autocomplete Utils']
 
 
     def check_for_changes(self):
@@ -90,18 +87,3 @@ class Mesh_checker():
         return tris_coords
 
     
-    def append_geo_nodes(self):
-        # append geometry nodes group AutocompleteUtils
-        print("Appending Autocomplete Utils")
-        USER = Path(resource_path('USER'))
-        src = USER / "scripts/addons"
-
-        file_path = src / "AutocompleteUtils.blend"
-        inner_path = "NodeTree"
-        object_name = "Autocomplete Utils"
-
-        bpy.ops.wm.append(
-            filepath=str(file_path / inner_path / object_name),
-            directory=str(file_path / inner_path),
-            filename=object_name
-        )
